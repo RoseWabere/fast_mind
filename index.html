@@ -1,0 +1,577 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="theme-color" content="#0d0d0d">
+<title>Fast Mind</title>
+<link rel="stylesheet" href="css/app.css">
+<link rel="manifest" href="manifest.json">
+<link rel="apple-touch-icon" href="assets/icon-192.png">
+<meta name="apple-mobile-web-app-title" content="Fast Mind">
+</head>
+<body>
+
+<!-- ══════════════════ HOME ══════════════════ -->
+<div class="scr on" id="sc-home">
+  <div class="tb">
+    <div>
+      <div class="tb-title">Fast Mind</div>
+      <div class="tb-sub" id="hm-sub">your protocol</div>
+    </div>
+    <div style="text-align:right">
+      <div id="real-clock" style="font-family:var(--mono);font-size:12px;color:var(--t2)"></div>
+      <div id="today-date" style="font-size:10px;color:var(--t3);font-family:var(--mono)"></div>
+    </div>
+  </div>
+  <div id="env-bar" class="env-bar" style="display:none">
+    <div>
+      <div class="env-label">⚡ Environment mode active</div>
+      <div style="font-size:10px;color:var(--t3);margin-top:2px">Adapted plan for your current setting</div>
+    </div>
+    <button class="btn btn-sm" onclick="toggleEnvMode()" style="font-size:10px;padding:4px 10px">Switch</button>
+  </div>
+  <div class="clock-wrap">
+    <div class="state-lbl" id="st-lbl">checking...</div>
+    <div class="ring-wrap">
+      <svg width="180" height="180" viewBox="0 0 180 180">
+        <circle class="ring-bg" cx="90" cy="90" r="76"/>
+        <circle class="ring-fill" id="ring" cx="90" cy="90" r="76" stroke="#c8b89a"
+          stroke-dasharray="477.5" stroke-dashoffset="477.5"/>
+      </svg>
+      <div class="ring-ctr">
+        <div class="ring-pct" id="ring-pct">0%</div>
+        <div class="ring-lbl" id="ring-lbl">of window</div>
+      </div>
+    </div>
+    <div class="countdown" id="countdown">--:--:--</div>
+    <div class="win-lbl" id="win-lbl">Loading...</div>
+  </div>
+  <div class="streak-row" id="streak-row"></div>
+  <div class="q-card" id="q-card">
+    <div class="q-text" id="q-text">Loading...</div>
+    <div class="q-auth" id="q-auth"></div>
+  </div>
+  <div class="home-actions">
+    <button class="btn btn-p" onclick="openModal('log','fast')">Log fast start</button>
+    <button class="btn" onclick="openModal('log','eat')">Log meal</button>
+    <button class="btn" onclick="nextQ()">New quote</button>
+    <button class="btn btn-r" onclick="openModal('log','slip')">I slipped</button>
+  </div>
+</div>
+
+<!-- ══════════════════ PROTOCOL ══════════════════ -->
+<div class="scr" id="sc-proto">
+  <div class="tb"><div class="tb-title">Protocol</div></div>
+  <div class="tab-row">
+    <button class="tab on" onclick="ptab(this,'pt-daily')">Daily</button>
+    <button class="tab" onclick="ptab(this,'pt-schedule')">Schedule</button>
+    <button class="tab" onclick="ptab(this,'pt-fasting')">Fasting</button>
+    <button class="tab" onclick="ptab(this,'pt-weeks')">12 Weeks</button>
+    <button class="tab" onclick="ptab(this,'pt-mindset')">Mindset</button>
+  </div>
+
+  <!-- DAILY -->
+  <div class="tab-body" id="pt-daily">
+    <h2>Daily protocol</h2>
+    <div class="card card-acc">
+      <h4>Core principle</h4>
+      <p>Fix insulin first. Every decision — what you eat, when, how long you fast — is in service of lowering your baseline insulin. Low insulin = fat burning mode. High insulin = fat storage mode. Wheat, sugar, and eating outside your window are the three primary insulin spikes to eliminate.</p>
+    </div>
+    <div class="sec-label">Morning fast</div>
+    <div class="card">
+      <h3>07:00 — Morning brew + muscle‑sparing movement</h3>
+      <p>Before anything else: 500ml warm water. Then brew: cinnamon + hibiscus + rosemary + ginger + turmeric + black pepper + cayenne.</p>
+      <p><strong>Movement (non‑negotiable):</strong> 10 min skipping + 5 min ab roller + <strong>5 heavy repetitions of squats with the 15kg dumbbells</strong> + <strong>5‑10 chest pulls</strong> (using the chest expander). This protects muscle tissue from breaking down during long sedentary hours.</p>
+    </div>
+    <div class="card">
+      <h3>During the fast window</h3>
+      <p>Herbal brews, plain water, black coffee only. Hunger is a wave — it peaks at 20 minutes and drops. When it hits: 300ml water + pinch of salt. Do not check phone immediately on waking — this spikes cortisol before your day starts.</p>
+    </div>
+    <div class="sec-label">Eating window (14:00 – 18:00)</div>
+    <div class="card card-grn">
+      <h3><span id="disp-open">14:00</span> — ACV shot (15 min before)</h3>
+      <p>1 tbsp apple cider vinegar in 200ml water, 15 minutes before first meal. This is your free Ozempic — it slows gastric emptying and blunts the blood sugar rise from your meal significantly. Do not skip it.</p>
+    </div>
+    <div class="card">
+      <h3>First meal — protein first, always</h3>
+      <p>Always start with protein or fat before any carbohydrate. Eggs, beans, omena, ndengu. Eat slowly. Stop at 80% full.</p>
+    </div>
+    <div class="card">
+      <h3>15:30–16:30 — Optional second meal</h3>
+      <p>Only if genuinely hungry — not bored, not stressed, not habitual. Peanuts + banana, boiled egg. Not mandatory.</p>
+    </div>
+    <div class="sec-label">Evening</div>
+    <div class="card card-red">
+      <h3><span id="disp-close">18:00</span> — Kitchen closes</h3>
+      <p>Brush teeth immediately. Evening brew: ashwagandha + chamomile + cinnamon + hibiscus. Brushing is the most effective behavioural signal to close eating.</p>
+    </div>
+    <div class="card">
+      <h3>22:00 — Wind down</h3>
+      <p>Journal 3 lines. Review tomorrow's one priority task. Every hour of sleep before midnight is worth double.</p>
+    </div>
+    <div class="sec-label">Dr. Mindy Pelz — cycle-aware additions</div>
+    <div class="card" style="border-left:3px solid var(--pur);border-radius:0 var(--rl) var(--rl) 0">
+      <h3>Cycle-aware fasting</h3>
+      <p>Days 1–10: ideal for longer fasts (16–24h). Days 11–15 (ovulation): maintain 16:8, don't push longer. Days 16–19: shorter fasts, more digestible protein. Days 20–28: reduce fasting, add more carbs (sweet potato, fruit) — prevents cortisol spike that triggers bingeing before period.</p>
+    </div>
+    <div class="sec-label">Dr. Huberman additions</div>
+    <div class="card card-blu">
+      <h3>Light + timing tools</h3>
+      <p>Outdoor light within 30–60 min of waking — sets your circadian clock, which controls cortisol timing and fat storage. Delay caffeine 90–120 min after waking. Largest meal 4–6 hours before sleep for best metabolic clearance.</p>
+    </div>
+  </div>
+
+  <!-- SCHEDULE (updated times to 14:00/18:00) -->
+  <div class="tab-body" id="pt-schedule" style="display:none">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
+      <h2 style="margin:0">Daily schedule</h2>
+      <span class="badge b-acc" id="sched-mode-badge">Standard</span>
+    </div>
+    <div style="display:flex;gap:8px;margin-bottom:14px">
+      <button class="btn btn-sm btn-p" id="sched-std-btn" onclick="setSchedMode('standard')" style="flex:1">Standard</button>
+      <button class="btn btn-sm" id="sched-env-btn" onclick="setSchedMode('environment')" style="flex:1">Environment</button>
+    </div>
+    <div id="sched-standard">
+      <div class="sch-item"><div class="sch-time">06:00</div><div class="sch-content"><div class="sch-title">Wake — 500ml warm water</div><div class="sch-sub">No phone for 10 minutes. Outdoor light immediately.</div></div></div>
+      <div class="sch-item"><div class="sch-time">06:30</div><div class="sch-content"><div class="sch-title">Morning brew</div><div class="sch-sub">Cinnamon + hibiscus + rosemary + ginger + turmeric + black pepper + cayenne.</div></div></div>
+      <div class="sch-item"><div class="sch-time">07:00</div><div class="sch-content"><div class="sch-title">Movement — 15 min fasted</div><div class="sch-sub">10 min skipping + 5 min ab roller + 5 heavy squats + chest pulls.</div></div></div>
+      <div class="sch-item"><div class="sch-time">07:30</div><div class="sch-content"><div class="sch-title">Deep work block 1</div><div class="sch-sub">25 min focus. No messages. Applications, projects, study.</div></div></div>
+      <div class="sch-item"><div class="sch-time">13:45</div><div class="sch-content"><div class="sch-title">ACV shot</div><div class="sch-sub">1 tbsp in 200ml water. 15 minutes before eating.</div></div></div>
+      <div class="sch-item"><div class="sch-time">14:00</div><div class="sch-content"><div class="sch-title">First meal — protein first</div><div class="sch-sub">Eggs, beans, ndengu, or omena. Stop at 80% full.</div></div></div>
+      <div class="sch-item"><div class="sch-time">15:30</div><div class="sch-content"><div class="sch-title">Optional snack</div><div class="sch-sub">Only if genuinely hungry. Peanuts + banana or boiled egg.</div></div></div>
+      <div class="sch-item"><div class="sch-time">17:30</div><div class="sch-content"><div class="sch-title">Resistance training</div><div class="sch-sub">See Exercise plan. Mon/Wed/Fri/Sat.</div></div></div>
+      <div class="sch-item"><div class="sch-time">17:45</div><div class="sch-content"><div class="sch-title">Last meal — lighter</div><div class="sch-sub">Protein + vegetables. No rice at dinner from week 3.</div></div></div>
+      <div class="sch-item"><div class="sch-time">17:55</div><div class="sch-content"><div class="sch-title">Walk — 10 min</div><div class="sch-sub">Post-meal walk lowers blood sugar by up to 30%.</div></div></div>
+      <div class="sch-item"><div class="sch-time">18:00</div><div class="sch-content"><div class="sch-title">Kitchen closes — brush teeth</div><div class="sch-sub">Evening brew: ashwagandha + chamomile + cinnamon + hibiscus.</div></div></div>
+      <div class="sch-item"><div class="sch-time">21:00</div><div class="sch-content"><div class="sch-title">Journal + tomorrow's one task</div><div class="sch-sub">3 lines. What went well. What to carry forward.</div></div></div>
+      <div class="sch-item"><div class="sch-time">22:30</div><div class="sch-content"><div class="sch-title">Sleep target</div><div class="sch-sub">Every hour before midnight is worth double. Ashwagandha helps.</div></div></div>
+    </div>
+    <div id="sched-environment" style="display:none">
+      <div class="card card-amb">
+        <h4>Environment mode — high-activity setting</h4>
+        <p>You're already exercising through NEAT. Strategy: control what goes in your mouth, not how much you move.</p>
+      </div>
+      <div class="sch-item"><div class="sch-time">07:00</div><div class="sch-content"><div class="sch-title">Morning brew before anything else</div><div class="sch-sub">Cinnamon + hibiscus + ginger + turmeric + cayenne in flask.</div></div></div>
+      <div class="sch-item"><div class="sch-time">11:00</div><div class="sch-content"><div class="sch-title">Tea / brunch strategy</div><div class="sch-sub">Push to 11:30 or noon. Eat peanuts or egg first. Max 1 mandazi.</div></div></div>
+      <div class="sch-item"><div class="sch-time">13:30</div><div class="sch-content"><div class="sch-title">Lunch — order of eating matters</div><div class="sch-sub">Vegetables first, protein second, starch last and small.</div></div></div>
+      <div class="sch-item"><div class="sch-time">18:00</div><div class="sch-content"><div class="sch-title">Stop eating. Evening brew.</div><div class="sch-sub">Even a 10.5-hour fast (8pm–6:30am) is effective.</div></div></div>
+    </div>
+  </div>
+
+  <!-- FASTING -->
+  <div class="tab-body" id="pt-fasting" style="display:none">
+    <h2>Fasting log</h2>
+    <div style="display:flex;gap:8px;margin-bottom:14px">
+      <button class="btn btn-p" style="flex:1" onclick="openModal('log','fast')">Log fast start</button>
+      <button class="btn btn-r" style="flex:1" onclick="openModal('log','slip')">Log slip</button>
+    </div>
+    <div id="fast-log-list"><div class="empty">No fast events logged yet.</div></div>
+  </div>
+
+  <!-- 12 WEEKS -->
+  <div class="tab-body" id="pt-weeks" style="display:none">
+    <h2>12-week plan</h2>
+    <div id="weeks-list"></div>
+  </div>
+
+  <!-- MINDSET -->
+  <div class="tab-body" id="pt-mindset" style="display:none">
+    <h2>Mindset</h2>
+    <div class="card card-acc">
+      <h4>The only rule that matters</h4>
+      <p>Do not quit on a hard day. Hard days are the protocol working — your body is resisting the change because the change is real. Every hard day you survive makes the next one easier.</p>
+    </div>
+    <div class="card">
+      <h3>On slipping</h3>
+      <p>A slip is one meal. One meal does not break twelve weeks. Log it, note what caused it — stress, boredom, social pressure — and move on immediately. The next meal is clean. There is no punishment fast, no compensation. Just the next meal, clean.</p>
+    </div>
+    <div class="card">
+      <h3>On hunger</h3>
+      <p>Hunger is not an emergency. It is a feeling, and feelings pass. Hunger peaks at 20 minutes then drops whether you feed it or not. The only question is which path you take during those 20 minutes. Drink water. Move to a different room. Do something with your hands.</p>
+    </div>
+    <div class="card card-grn">
+      <h3>On non-scale victories</h3>
+      <p>Energy levels. Sleep quality. How your clothes fit. Hunger control. Mood stability. Mental clarity. These change weeks before the scale moves. The scale is the last thing to change and the least reliable indicator of what's actually happening.</p>
+    </div>
+    <div class="card">
+      <h3>On environment</h3>
+      <p>The strongest person in the world cannot out-willpower a kitchen full of the wrong food. Win the environment, not the craving. You make food decisions when you shop, not when you're hungry. Shop right and the hard decision is already made.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════ MEALS ══════════════════ -->
+<div class="scr" id="sc-meals">
+  <div class="tb"><div class="tb-title">Meals</div></div>
+  <div class="tab-row">
+    <button class="tab on" onclick="mtab(this,'ml-plans')">Today</button>
+    <button class="tab" onclick="mtab(this,'ml-log')">Eaten today</button>
+    <button class="tab" onclick="mtab(this,'ml-env')">Environment</button>
+    <button class="tab" onclick="mtab(this,'ml-add')">Add meal</button>
+  </div>
+
+  <!-- TODAY'S PLAN -->
+  <div class="tab-body" id="ml-plans">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px">
+      <h2 style="margin:0">Today's meals</h2>
+      <button class="btn btn-sm" onclick="resetTodayMeals()" style="font-size:10px;padding:4px 10px;color:var(--t3)">Reset ticks</button>
+    </div>
+    <div id="meal-plan-date" style="font-size:10px;color:var(--t3);font-family:var(--mono);margin-bottom:10px"></div>
+    <div class="card card-acc" style="margin-bottom:10px">
+      <h4>Protein rule</h4>
+      <p>Every meal starts with protein or fat before any carbohydrate. Tick off each slot as you eat it — it logs to your day's record.</p>
+    </div>
+
+    <!-- SLOT: FASTING WINDOW -->
+    <div class="meal-slot-header" id="slot-fast">
+      <div class="slot-time-label">
+        <span class="slot-dot" style="background:var(--blu)"></span>
+        <span class="slot-title">Fasting window</span>
+        <span class="slot-time-range" id="slot-fast-range">until 14:00</span>
+      </div>
+      <div class="slot-status" id="slot-fast-status"></div>
+    </div>
+    <div class="meal-card tickable" id="tick-morning-brew" data-slot="fast">
+      <div class="meal-top">
+        <div style="display:flex;align-items:center;gap:10px;flex:1">
+          <button class="tick-btn" onclick="tickMeal('tick-morning-brew',this)"><svg width="18" height="18" viewBox="0 0 18 18"><circle cx="9" cy="9" r="8" stroke="currentColor" stroke-width="1.5" fill="none"/><path class="tick-check" d="M5.5 9l2.5 2.5 4.5-4.5" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round" style="display:none"/></svg></button>
+          <div class="meal-name">Morning brew</div>
+        </div>
+        <button class="meal-toggle" onclick="toggleMeal(this)">Recipe ▾</button>
+      </div>
+      <div style="margin-top:6px;padding-left:28px"><span class="badge b-blu">zero insulin</span> <span class="badge b-grn">fat burning</span></div>
+      <div class="meal-body">
+        <div class="meal-section">Why</div>
+        <p>Starts your fasted state with thermogenic spices that increase fat oxidation and suppress appetite.</p>
+        <div class="meal-section">Brew</div>
+        <p>Cinnamon + hibiscus + rosemary + ginger + turmeric + black pepper + cayenne. Add lemon if available. No milk, no sugar. Boil in batch, store in flask.</p>
+        <div class="meal-section">Safe during fast</div>
+        <p>Hibiscus cold-steeped (best fasting drink), cinnamon water (extends fat-burning), ginger water (kills hunger waves), rosemary cold steep (zero insulin), black coffee no milk or sugar.</p>
+        <div class="meal-section">Avoid during fast</div>
+        <p>Milk, sugar, baobab in quantity. Chia seeds in water are borderline — can trigger digestive activity.</p>
+      </div>
+    </div>
+
+    <!-- SLOT: FIRST MEAL (14:00) -->
+    <div class="meal-slot-header" id="slot-first">
+      <div class="slot-time-label">
+        <span class="slot-dot" style="background:var(--grn)"></span>
+        <span class="slot-title">First meal</span>
+        <span class="slot-time-range" id="slot-first-range">from 14:00</span>
+      </div>
+      <div class="slot-status" id="slot-first-status"></div>
+    </div>
+    <div class="card card-grn" style="margin-bottom:10px;padding:10px 14px"><p style="font-size:12px;margin:0">ACV shot 15 min before eating. Protein or fat goes in first — always.</p></div>
+
+    <!-- EXISTING MEAL CARDS (preserved) -->
+    <div class="meal-card tickable" id="tick-eggs-sukuma" data-slot="first">
+      <div class="meal-top"><div style="display:flex;align-items:center;gap:10px;flex:1"><button class="tick-btn" onclick="tickMeal('tick-eggs-sukuma',this)"><svg width="18" height="18" viewBox="0 0 18 18"><circle cx="9" cy="9" r="8" stroke="currentColor" stroke-width="1.5" fill="none"/><path class="tick-check" d="M5.5 9l2.5 2.5 4.5-4.5" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round" style="display:none"/></svg></button><div class="meal-name">Eggs + sukuma scramble</div></div><button class="meal-toggle" onclick="toggleMeal(this)">Recipe ▾</button></div>
+      <div style="margin-top:6px;padding-left:28px"><span class="badge b-grn">high protein</span> <span class="badge b-acc">low GI</span></div>
+      <div class="meal-body"><div class="meal-section">Why</div><p>Eggs provide complete protein and healthy fats; sukuma adds fibre and micronutrients with minimal insulin impact.</p><div class="meal-section">Ingredients</div><p>2 eggs · 1 cup sukuma wiki or spinach · ¼ onion · 1 tomato · ½ tsp turmeric · ½ tsp ginger · pinch cayenne · salt · tiny oil</p><div class="meal-section">Method</div><p>Fry onion lightly. Add tomato, spices, cook 2 min. Add sukuma, stir 2 min. Push to side, scramble or poach eggs in same pan. Eat slowly.</p></div>
+    </div>
+
+    <div class="meal-card tickable" id="tick-sweet-potato-egg" data-slot="first">
+      <div class="meal-top"><div style="display:flex;align-items:center;gap:10px;flex:1"><button class="tick-btn" onclick="tickMeal('tick-sweet-potato-egg',this)"><svg width="18" height="18" viewBox="0 0 18 18"><circle cx="9" cy="9" r="8" stroke="currentColor" stroke-width="1.5" fill="none"/><path class="tick-check" d="M5.5 9l2.5 2.5 4.5-4.5" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round" style="display:none"/></svg></button><div class="meal-name">Sweet potato + egg scramble</div></div><button class="meal-toggle" onclick="toggleMeal(this)">Recipe ▾</button></div>
+      <div style="margin-top:6px;padding-left:28px"><span class="badge b-grn">balanced</span> <span class="badge b-acc">complex carb</span></div>
+      <div class="meal-body"><div class="meal-section">Why</div><p>Cooled sweet potato provides resistant starch; eggs blunt the glucose response.</p><div class="meal-section">Ingredients</div><p>1 medium sweet potato (skin on) · 2 eggs · ¼ onion · 1 tomato · turmeric · ginger · black pepper · cayenne · ½ tsp moringa</p><div class="meal-section">Method</div><p>Boil or roast sweet potato. Cool first — cooling increases resistant starch. Dice. Fry onion and tomato with spices. Add sweet potato, stir 2 min. Scramble eggs into same pan. Moringa off heat.</p></div>
+    </div>
+
+    <div class="meal-card tickable" id="tick-fermented-uji" data-slot="first">
+      <div class="meal-top"><div style="display:flex;align-items:center;gap:10px;flex:1"><button class="tick-btn" onclick="tickMeal('tick-fermented-uji',this)"><svg width="18" height="18" viewBox="0 0 18 18"><circle cx="9" cy="9" r="8" stroke="currentColor" stroke-width="1.5" fill="none"/><path class="tick-check" d="M5.5 9l2.5 2.5 4.5-4.5" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round" style="display:none"/></svg></button><div class="meal-name">Fermented uji</div></div><button class="meal-toggle" onclick="toggleMeal(this)">Recipe ▾</button></div>
+      <div style="margin-top:6px;padding-left:28px"><span class="badge b-acc">complex carb</span> <span class="badge b-grn">gut health</span></div>
+      <div class="meal-body">
+        <div class="meal-section">Why</div>
+        <p>Overnight fermented wimbi flour porridge finished with maziwa mala and cinnamon – the fermentation lowers the glycemic index dramatically, and the probiotics improve gut health. No sugar, no insulin spike.</p>
+        <div class="meal-section">Ferment (night before)</div>
+        <p>Mix uji flour with room temperature water — slightly more than cooking ratio. Cover with cloth, not airtight. Leave 12–24 hours. In morning it smells slightly sour. Stir the thin liquid layer back in, do not discard. Cook as normal. Sour taste is mild after cooking.</p>
+        <div class="meal-section">Finishing</div>
+        <p>Add maziwa mala after cooling slightly (not boiling — preserves live bacteria). Add cinnamon, moringa, chia seeds, ginger. Very little or no sugar. Optionally mash half a ripe banana in — sweetens naturally.</p>
+      </div>
+    </div>
+
+    <div class="meal-card tickable" id="tick-ndengu-moringa" data-slot="first">
+      <div class="meal-top"><div style="display:flex;align-items:center;gap:10px;flex:1"><button class="tick-btn" onclick="tickMeal('tick-ndengu-moringa',this)"><svg width="18" height="18" viewBox="0 0 18 18"><circle cx="9" cy="9" r="8" stroke="currentColor" stroke-width="1.5" fill="none"/><path class="tick-check" d="M5.5 9l2.5 2.5 4.5-4.5" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round" style="display:none"/></svg></button><div class="meal-name">Ndengu + moringa</div></div><button class="meal-toggle" onclick="toggleMeal(this)">Recipe ▾</button></div>
+      <div style="margin-top:6px;padding-left:28px"><span class="badge b-grn">very low GI</span> <span class="badge b-blu">iron + protein</span></div>
+      <div class="meal-body"><div class="meal-section">Why</div><p>Ndengu (green grams) are a low‑glycemic protein source; moringa adds iron and B vitamins without raising insulin.</p><div class="meal-section">Method</div><p>Boil ndengu 25–30 min. Fry onion, add tomato and spices (cinnamon, turmeric, ginger, black pepper), cook to paste. Add ndengu and broth, simmer 5 min. Stir moringa off heat — never boil moringa.</p></div>
+    </div>
+
+    <div class="meal-card tickable" id="tick-boiled-green-banana-omena" data-slot="first">
+      <div class="meal-top"><div style="display:flex;align-items:center;gap:10px;flex:1"><button class="tick-btn" onclick="tickMeal('tick-boiled-green-banana-omena',this)"><svg width="18" height="18" viewBox="0 0 18 18"><circle cx="9" cy="9" r="8" stroke="currentColor" stroke-width="1.5" fill="none"/><path class="tick-check" d="M5.5 9l2.5 2.5 4.5-4.5" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round" style="display:none"/></svg></button><div class="meal-name">Boiled green banana + omena</div></div><button class="meal-toggle" onclick="toggleMeal(this)">Recipe ▾</button></div>
+      <div style="margin-top:6px;padding-left:28px"><span class="badge b-grn">resistant starch</span> <span class="badge b-grn">omega-3</span></div>
+      <div class="meal-body"><div class="meal-section">Why</div><p>Green bananas are rich in resistant starch; omena provides calcium and omega‑3s that reduce inflammation.</p><div class="meal-section">Method</div><p>Score and peel green bananas under running water (avoids sap staining). Boil in salted water 20–25 min until tender. For omena: rinse well, fry onion, tomato, turmeric, ginger, cayenne. Add omena, stir until done. Serve together.</p></div>
+    </div>
+
+    <!-- NEW ADDED MEALS (following same structure) -->
+    <div class="meal-card tickable" id="tick-sukuma-spinach-ndengu" data-slot="first">
+      <div class="meal-top"><div style="display:flex;align-items:center;gap:10px;flex:1"><button class="tick-btn" onclick="tickMeal('tick-sukuma-spinach-ndengu',this)"><svg width="18" height="18" viewBox="0 0 18 18"><circle cx="9" cy="9" r="8" stroke="currentColor" stroke-width="1.5" fill="none"/><path class="tick-check" d="M5.5 9l2.5 2.5 4.5-4.5" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round" style="display:none"/></svg></button><div class="meal-name">Sukuma + Spinach + Ndengu Blend</div></div><button class="meal-toggle" onclick="toggleMeal(this)">Recipe ▾</button></div>
+      <div style="margin-top:6px;padding-left:28px"><span class="badge b-grn">low gas</span> <span class="badge b-grn">iron rich</span></div>
+      <div class="meal-body"><div class="meal-section">Why</div><p>Mixed dark greens sautéed in 1 tsp oil with onions and tomatoes, paired with clean green ndengu/yellow beans. Prevents gut sluggishness without cabbage gas – perfect for sensitive stomachs.</p><div class="meal-section">Ingredients</div><p>1 cup sukuma wiki · 1 cup spinach · ½ cup cooked ndengu or yellow beans · 1 small onion · 1 tomato · 1 tsp oil · turmeric, ginger, black pepper.</p><div class="meal-section">Method</div><p>Sauté onion and tomato in oil until soft. Add spices, then sukuma and spinach – cook 2‑3 minutes until just wilted. Stir in ndengu, heat through. Eat with a squeeze of lemon.</p></div>
+    </div>
+
+    <div class="meal-card tickable" id="tick-wimbi-egg-pancake" data-slot="first">
+      <div class="meal-top"><div style="display:flex;align-items:center;gap:10px;flex:1"><button class="tick-btn" onclick="tickMeal('tick-wimbi-egg-pancake',this)"><svg width="18" height="18" viewBox="0 0 18 18"><circle cx="9" cy="9" r="8" stroke="currentColor" stroke-width="1.5" fill="none"/><path class="tick-check" d="M5.5 9l2.5 2.5 4.5-4.5" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round" style="display:none"/></svg></button><div class="meal-name">Wimbi + Egg Sweet Pancake</div></div><button class="meal-toggle" onclick="toggleMeal(this)">Recipe ▾</button></div>
+      <div style="margin-top:6px;padding-left:28px"><span class="badge b-acc">no oil</span> <span class="badge b-grn">cinnamon</span></div>
+      <div class="meal-body"><div class="meal-section">Why</div><p>1 cup millet flour bound with 2 whole kiosk eggs, a mashed small banana, and a heavy teaspoon of cinnamon powder, pan‑fried dry with zero oil to mimic a safe sponge cake – kills sweet cravings without insulin spike.</p><div class="meal-section">Ingredients</div><p>1 cup wimbi (millet) flour · 2 eggs · 1 small ripe banana (mashed) · 1 tsp cinnamon powder · pinch of salt.</p><div class="meal-section">Method</div><p>Whisk eggs, then mix in mashed banana, cinnamon and salt. Add wimbi flour slowly to form a thick batter. Heat a non‑stick pan (no oil). Pour small ladles, cook until bubbles form, flip. Serve with a drizzle of maziwa mala if desired.</p></div>
+    </div>
+
+    <div class="meal-card tickable" id="tick-cold-rice-gizzards" data-slot="first">
+      <div class="meal-top"><div style="display:flex;align-items:center;gap:10px;flex:1"><button class="tick-btn" onclick="tickMeal('tick-cold-rice-gizzards',this)"><svg width="18" height="18" viewBox="0 0 18 18"><circle cx="9" cy="9" r="8" stroke="currentColor" stroke-width="1.5" fill="none"/><path class="tick-check" d="M5.5 9l2.5 2.5 4.5-4.5" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round" style="display:none"/></svg></button><div class="meal-name">Cold‑Hack Rice & Gizzards</div></div><button class="meal-toggle" onclick="toggleMeal(this)">Recipe ▾</button></div>
+      <div style="margin-top:6px;padding-left:28px"><span class="badge b-grn">resistant starch</span> <span class="badge b-grn">high protein</span></div>
+      <div class="meal-body"><div class="meal-section">Why</div><p>100g cheap boiled chicken gizzards paired with white rice that has been pre‑cooled for 24 hours – cooling generates resistant starch, cutting active calories by ~50% and blunting the insulin response.</p><div class="meal-section">Ingredients</div><p>100g chicken gizzards (boiled) · 1 cup cooked white rice (cooled 24h in fridge) · onion, tomato, spices.</p><div class="meal-section">Method</div><p>Boil gizzards until tender (30‑40 min). Fry onion and tomato, add gizzards. Meanwhile, cook rice a day ahead and refrigerate uncovered. Reheat the gizzards, serve over cold rice (or reheat rice gently – resistant starch remains).</p></div>
+    </div>
+
+    <div class="meal-card tickable" id="tick-avocado-banana-fuel" data-slot="first">
+      <div class="meal-top"><div style="display:flex;align-items:center;gap:10px;flex:1"><button class="tick-btn" onclick="tickMeal('tick-avocado-banana-fuel',this)"><svg width="18" height="18" viewBox="0 0 18 18"><circle cx="9" cy="9" r="8" stroke="currentColor" stroke-width="1.5" fill="none"/><path class="tick-check" d="M5.5 9l2.5 2.5 4.5-4.5" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round" style="display:none"/></svg></button><div class="meal-name">Avocado + Banana (or Cinnamon Wimbi Pancake)</div></div><button class="meal-toggle" onclick="toggleMeal(this)">Recipe ▾</button></div>
+      <div style="margin-top:6px;padding-left:28px"><span class="badge b-grn">slow carb</span> <span class="badge b-grn">healthy fat</span></div>
+      <div class="meal-body"><div class="meal-section">Why</div><p>Half a fresh whole avocado paired with a small banana or a cinnamon‑wimbi pancake. The healthy fats from avocado slow down glucose absorption from the banana, preventing a blood sugar spike and keeping you satiated for hours.</p><div class="meal-section">How to eat</div><p>Cut half an avocado, slice a small banana. Eat together, or mash the avocado onto the pancake. Ideal as a pre‑workout or afternoon fuel.</p></div>
+    </div>
+
+    <!-- SLOT: MIDDAY (existing cards preserved, plus new ones if any) -->
+    <div class="meal-slot-header" id="slot-mid">
+      <div class="slot-time-label"><span class="slot-dot" style="background:var(--amb)"></span><span class="slot-title">Second meal</span><span class="slot-time-range">optional</span></div>
+      <div class="slot-status" id="slot-mid-status"></div>
+    </div>
+    <div class="card card-amb" style="margin-bottom:10px;padding:10px 14px"><p style="font-size:12px;margin:0">Only if genuinely hungry — not bored, not stressed.</p></div>
+
+    <!-- existing omena-cabbage, rice-beans-cabbage, rice-gizzard, sweet-potato-ndengu, green-banana-beans – keep untouched -->
+    <div class="meal-card tickable" id="tick-omena-cabbage" data-slot="mid"><div class="meal-top"><div style="display:flex;align-items:center;gap:10px;flex:1"><button class="tick-btn" onclick="tickMeal('tick-omena-cabbage',this)"><svg width="18" height="18" viewBox="0 0 18 18"><circle cx="9" cy="9" r="8" stroke="currentColor" stroke-width="1.5" fill="none"/><path class="tick-check" d="M5.5 9l2.5 2.5 4.5-4.5" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round" style="display:none"/></svg></button><div class="meal-name">Omena + cabbage</div></div><button class="meal-toggle" onclick="toggleMeal(this)">Recipe ▾</button></div><div style="margin-top:6px;padding-left:28px"><span class="badge b-grn">omega-3</span> <span class="badge b-acc">calcium</span></div><div class="meal-body"><div class="meal-section">Method</div><p>Rinse omena well. Fry onion and tomato with turmeric, ginger, cayenne. Add omena. Add shredded cabbage last, cook 3 min only — keep the crunch. Serve as-is or with ¼ cup rice max.</p></div></div>
+    <div class="meal-card tickable" id="tick-rice-beans-cabbage" data-slot="mid"><div class="meal-top"><div style="display:flex;align-items:center;gap:10px;flex:1"><button class="tick-btn" onclick="tickMeal('tick-rice-beans-cabbage',this)"><svg width="18" height="18" viewBox="0 0 18 18"><circle cx="9" cy="9" r="8" stroke="currentColor" stroke-width="1.5" fill="none"/><path class="tick-check" d="M5.5 9l2.5 2.5 4.5-4.5" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round" style="display:none"/></svg></button><div class="meal-name">Rice + beans + cabbage (one-pot)</div></div><button class="meal-toggle" onclick="toggleMeal(this)">Recipe ▾</button></div><div style="margin-top:6px;padding-left:28px"><span class="badge b-acc">moderate</span> <span class="badge b-grn">filling</span></div><div class="meal-body"><div class="meal-section">One-pot method</div><p>Fry onion, garlic, tomato, cinnamon, ginger, turmeric. Add rinsed rice, stir to coat. Add pre-cooked beans and water at rice ratio. Cook until almost done. Lay shredded cabbage on top, cover, steam 5 min.</p><div class="meal-section">Eating order</div><p>Eat bean-cabbage portion first, rice second. Njahi (black beans) has the lowest GI — prioritise njahi over red or yellow beans.</p></div></div>
+    <div class="meal-card tickable" id="tick-rice-gizzard" data-slot="mid"><div class="meal-top"><div style="display:flex;align-items:center;gap:10px;flex:1"><button class="tick-btn" onclick="tickMeal('tick-rice-gizzard',this)"><svg width="18" height="18" viewBox="0 0 18 18"><circle cx="9" cy="9" r="8" stroke="currentColor" stroke-width="1.5" fill="none"/><path class="tick-check" d="M5.5 9l2.5 2.5 4.5-4.5" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round" style="display:none"/></svg></button><div class="meal-name">Rice + gizzard + beans</div></div><button class="meal-toggle" onclick="toggleMeal(this)">Recipe ▾</button></div><div style="margin-top:6px;padding-left:28px"><span class="badge b-grn">very high protein</span> <span class="badge b-acc">low fat</span></div><div class="meal-body"><div class="meal-section">Method</div><p>Boil gizzards 30–40 min until tender — do not rush. Fry onion, tomato, ginger, turmeric, garlic, black pepper, paprika, cayenne. Add gizzards, fry until browned. Add pre-cooked beans + small water, simmer 10 min. Small rice, large sukuma/cabbage on the side.</p></div></div>
+    <div class="meal-card tickable" id="tick-sweet-potato-ndengu" data-slot="mid"><div class="meal-top"><div style="display:flex;align-items:center;gap:10px;flex:1"><button class="tick-btn" onclick="tickMeal('tick-sweet-potato-ndengu',this)"><svg width="18" height="18" viewBox="0 0 18 18"><circle cx="9" cy="9" r="8" stroke="currentColor" stroke-width="1.5" fill="none"/><path class="tick-check" d="M5.5 9l2.5 2.5 4.5-4.5" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round" style="display:none"/></svg></button><div class="meal-name">Sweet potato + ndengu stew</div></div><button class="meal-toggle" onclick="toggleMeal(this)">Recipe ▾</button></div><div style="margin-top:6px;padding-left:28px"><span class="badge b-grn">very low GI</span></div><div class="meal-body"><div class="meal-section">Method</div><p>Cook ndengu until soft. Boil sweet potato chunks until just tender — do not overcook. Fry onion, tomato, cinnamon, ginger, turmeric, black pepper. Add ndengu with broth. Add sweet potato last, simmer 5 min only. Moringa off heat.</p></div></div>
+    <div class="meal-card tickable" id="tick-green-banana-beans" data-slot="mid"><div class="meal-top"><div style="display:flex;align-items:center;gap:10px;flex:1"><button class="tick-btn" onclick="tickMeal('tick-green-banana-beans',this)"><svg width="18" height="18" viewBox="0 0 18 18"><circle cx="9" cy="9" r="8" stroke="currentColor" stroke-width="1.5" fill="none"/><path class="tick-check" d="M5.5 9l2.5 2.5 4.5-4.5" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round" style="display:none"/></svg></button><div class="meal-name">Green banana + bean stew</div></div><button class="meal-toggle" onclick="toggleMeal(this)">Recipe ▾</button></div><div style="margin-top:6px;padding-left:28px"><span class="badge b-grn">resistant starch</span> <span class="badge b-grn">gut health</span></div><div class="meal-body"><div class="meal-section">Method</div><p>Add boiled green banana chunks to bean stew in the last 10 minutes of cooking. They absorb the broth and spices. Season beans with cinnamon, ginger, turmeric, black pepper. The resistant starch feeds gut bacteria that reduce fat storage over time.</p></div></div>
+
+    <!-- SLOT: SNACK (existing cards preserved) -->
+    <div class="meal-slot-header" id="slot-snack"><div class="slot-time-label"><span class="slot-dot" style="background:var(--acc)"></span><span class="slot-title">Afternoon snack</span><span class="slot-time-range">optional</span></div><div class="slot-status" id="slot-snack-status"></div></div>
+    <div class="meal-card tickable" id="tick-cold-sweet-potato" data-slot="snack"><div class="meal-top"><div style="display:flex;align-items:center;gap:10px;flex:1"><button class="tick-btn" onclick="tickMeal('tick-cold-sweet-potato',this)"><svg width="18" height="18" viewBox="0 0 18 18"><circle cx="9" cy="9" r="8" stroke="currentColor" stroke-width="1.5" fill="none"/><path class="tick-check" d="M5.5 9l2.5 2.5 4.5-4.5" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round" style="display:none"/></svg></button><div class="meal-name">Cold sweet potato + peanuts</div></div><button class="meal-toggle" onclick="toggleMeal(this)">Recipe ▾</button></div><div style="margin-top:6px;padding-left:28px"><span class="badge b-grn">low GI</span> <span class="badge b-acc">fat-loss snack</span></div><div class="meal-body"><div class="meal-section">Why cold</div><p>Boil sweet potatoes, cool completely, store. Eat cold with a handful of peanuts. Cold potato has meaningfully lower GI than hot. The peanuts add fat and protein that slow glucose absorption further. This is a legitimate fat-loss snack.</p></div></div>
+    <div class="meal-card tickable" id="tick-banana-peanut" data-slot="snack"><div class="meal-top"><div style="display:flex;align-items:center;gap:10px;flex:1"><button class="tick-btn" onclick="tickMeal('tick-banana-peanut',this)"><svg width="18" height="18" viewBox="0 0 18 18"><circle cx="9" cy="9" r="8" stroke="currentColor" stroke-width="1.5" fill="none"/><path class="tick-check" d="M5.5 9l2.5 2.5 4.5-4.5" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round" style="display:none"/></svg></button><div class="meal-name">Ripe banana + peanut + cinnamon</div></div><button class="meal-toggle" onclick="toggleMeal(this)">Recipe ▾</button></div><div style="margin-top:6px;padding-left:28px"><span class="badge b-amb">craving swap</span></div><div class="meal-body"><div class="meal-section">The combination</div><p>1 ripe banana + 1 tbsp peanuts + pinch cinnamon. Eat this when a sweet craving hits. Peanut fat slows the banana sugar. Cinnamon caps the insulin response. Use this instead of chapati or biscuits.</p></div></div>
+    <div class="meal-card tickable" id="tick-chapati-strategy" data-slot="snack"><div class="meal-top"><div style="display:flex;align-items:center;gap:10px;flex:1"><button class="tick-btn" onclick="tickMeal('tick-chapati-strategy',this)"><svg width="18" height="18" viewBox="0 0 18 18"><circle cx="9" cy="9" r="8" stroke="currentColor" stroke-width="1.5" fill="none"/><path class="tick-check" d="M5.5 9l2.5 2.5 4.5-4.5" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round" style="display:none"/></svg></button><div class="meal-name">Chapati / cake — harm reduction</div></div><button class="meal-toggle" onclick="toggleMeal(this)">Recipe ▾</button></div><div style="margin-top:6px;padding-left:28px"><span class="badge b-amb">harm reduction</span></div><div class="meal-body"><div class="meal-section">Before eating</div><p>Eat protein or fat first — two boiled eggs, peanuts, or beans. ACV in water 15 min before if you know it is coming.</p><div class="meal-section">After eating</div><p>10-minute walk. This brings the blood glucose peak down significantly. Research-backed, not guesswork.</p><div class="meal-section">Biscuits rule</div><p>After a meal, never on empty stomach. Two biscuits after a protein meal is metabolically very different from two biscuits at 10pm fasted.</p></div></div>
+
+    <!-- SLOT: DINNER (existing cards plus new sweet cinnamon omelette) -->
+    <div class="meal-slot-header" id="slot-dinner"><div class="slot-time-label"><span class="slot-dot" style="background:var(--red)"></span><span class="slot-title">Dinner — last meal</span><span class="slot-time-range" id="slot-dinner-range">by 18:00</span></div><div class="slot-status" id="slot-dinner-status"></div></div>
+    <div class="card card-red" style="margin-bottom:10px;padding:10px 14px"><p style="font-size:12px;margin:0">Kitchen closes at 18:00. Lighter than first meal. No rice at dinner from week 3.</p></div>
+
+    <div class="meal-card tickable" id="tick-spinach-egg-soup" data-slot="dinner"><div class="meal-top"><div style="display:flex;align-items:center;gap:10px;flex:1"><button class="tick-btn" onclick="tickMeal('tick-spinach-egg-soup',this)"><svg width="18" height="18" viewBox="0 0 18 18"><circle cx="9" cy="9" r="8" stroke="currentColor" stroke-width="1.5" fill="none"/><path class="tick-check" d="M5.5 9l2.5 2.5 4.5-4.5" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round" style="display:none"/></svg></button><div class="meal-name">Spinach + egg soup</div></div><button class="meal-toggle" onclick="toggleMeal(this)">Recipe ▾</button></div><div style="margin-top:6px;padding-left:28px"><span class="badge b-grn">light</span> <span class="badge b-grn">no starch</span></div><div class="meal-body"><div class="meal-section">Method</div><p>Fry onion and garlic. Add tomato and spices, cook 2 min. Add 1 cup water, bring to simmer. Add 2 cups spinach or sukuma, cook 2 min. Crack 2 eggs directly into simmering broth, poach 3–4 min. No rice or ugali at dinner from week 3.</p></div></div>
+    <div class="meal-card tickable" id="tick-beans-potato-stew" data-slot="dinner"><div class="meal-top"><div style="display:flex;align-items:center;gap:10px;flex:1"><button class="tick-btn" onclick="tickMeal('tick-beans-potato-stew',this)"><svg width="18" height="18" viewBox="0 0 18 18"><circle cx="9" cy="9" r="8" stroke="currentColor" stroke-width="1.5" fill="none"/><path class="tick-check" d="M5.5 9l2.5 2.5 4.5-4.5" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round" style="display:none"/></svg></button><div class="meal-name">Beans + potato stew (done properly)</div></div><button class="meal-toggle" onclick="toggleMeal(this)">Recipe ▾</button></div><div style="margin-top:6px;padding-left:28px"><span class="badge b-acc">moderate</span></div><div class="meal-body"><div class="meal-section">Method</div><p>Cook beans with onion, tomato, cinnamon, ginger, turmeric, black pepper, and generous cabbage or sukuma. Add potato chunks in last 15 min. Eat the bean-vegetable portion heavily, potato lightly. If you cool and reheat the stew, potato GI drops substantially.</p><div class="meal-section">Cold potato salad variation</div><p>Boil potatoes, cool completely. Toss cold with raw sukuma, diced tomato, onion, lemon juice, black pepper, salt. No mayonnaise. Cooling is what makes this a different food metabolically.</p></div></div>
+    <div class="meal-card tickable" id="tick-rice-chicken-beans" data-slot="dinner"><div class="meal-top"><div style="display:flex;align-items:center;gap:10px;flex:1"><button class="tick-btn" onclick="tickMeal('tick-rice-chicken-beans',this)"><svg width="18" height="18" viewBox="0 0 18 18"><circle cx="9" cy="9" r="8" stroke="currentColor" stroke-width="1.5" fill="none"/><path class="tick-check" d="M5.5 9l2.5 2.5 4.5-4.5" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round" style="display:none"/></svg></button><div class="meal-name">Chicken + beans (small rice)</div></div><button class="meal-toggle" onclick="toggleMeal(this)">Recipe ▾</button></div><div style="margin-top:6px;padding-left:28px"><span class="badge b-grn">high protein</span></div><div class="meal-body"><div class="meal-section">Method</div><p>Brown chicken in onion, tomato, garlic, ginger, paprika, turmeric, cinnamon, black pepper. Add small water, braise until cooked through. Add beans last 10 min to absorb flavour. More vegetables than rice.</p></div></div>
+
+    <!-- NEW: Sweet Cinnamon Omelette (dinner slot) -->
+    <div class="meal-card tickable" id="tick-cinnamon-omelette" data-slot="dinner">
+      <div class="meal-top"><div style="display:flex;align-items:center;gap:10px;flex:1"><button class="tick-btn" onclick="tickMeal('tick-cinnamon-omelette',this)"><svg width="18" height="18" viewBox="0 0 18 18"><circle cx="9" cy="9" r="8" stroke="currentColor" stroke-width="1.5" fill="none"/><path class="tick-check" d="M5.5 9l2.5 2.5 4.5-4.5" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round" style="display:none"/></svg></button><div class="meal-name">Sweet Cinnamon Omelette (30‑Shilling Cake)</div></div><button class="meal-toggle" onclick="toggleMeal(this)">Recipe ▾</button></div>
+      <div style="margin-top:6px;padding-left:28px"><span class="badge b-acc">evening snack</span> <span class="badge b-grn">cinnamon</span></div>
+      <div class="meal-body"><div class="meal-section">Why</div><p>2 or 3 medium eggs whisked frothy with a heavy dash of cinnamon powder and dry pan‑fried – kills evening emotional snacking for under 30 shillings, provides protein and cinnamon’s insulin‑sensitising effect.</p><div class="meal-section">Ingredients</div><p>2‑3 eggs · 1 tsp cinnamon powder · pinch of salt (optional).</p><div class="meal-section">Method</div><p>Whisk eggs vigorously until frothy. Stir in cinnamon. Heat a non‑stick pan (no oil). Pour egg mixture, swirl to spread. Cook until set, flip briefly. Eat like a flat cake.</p></div>
+    </div>
+    <div style="height:20px"></div>
+  </div>
+
+  <!-- EATEN TODAY (unchanged) -->
+  <div class="tab-body" id="ml-log" style="display:none">
+    <h2>Eaten today</h2>
+    <div id="today-eaten-list"><div class="empty">No meals ticked today. Go to Today and tick what you eat.</div></div>
+    <div class="divider"></div>
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">
+      <div class="sec-label" style="margin:0">Manual add</div>
+      <button class="btn btn-sm btn-p" onclick="openModal('foodlog',null)">+ Add</button>
+    </div>
+    <div id="food-log-list"><div class="empty">No manual entries.</div></div>
+  </div>
+
+  <!-- ENVIRONMENT TAB (replaced with emergency protocols + original strategies) -->
+  <div class="tab-body" id="ml-env" style="display:none">
+    <h2>Environment & Emergency Protocols</h2>
+    <div class="card card-red" style="margin-bottom:12px">
+      <h3>🚨 Out All Day – Zero‑Money OMAD</h3>
+      <p><strong>When:</strong> Stuck away from home with no food access.</p>
+      <p><strong>Protocol:</strong><br>→ Shift to a 24‑hour fast (skip eating entirely).<br>→ At 11:00 AM and 4:00 PM, place a pinch of raw salt on your tongue followed by plain water – this turns off stomach acid spasms and false hunger.<br>→ When you return home at night, break the fast strictly with 2 boiled eggs <em>first</em> to shield your stomach wall before any dense food.<br>→ Wait 15 minutes, then eat your normal meal (protein first).</p>
+    </div>
+    <div class="card card-amb" style="margin-bottom:12px">
+      <h3>⚡ Controlled Metabolic Shock (Every 2 Weeks Only)</h3>
+      <p><strong>Strict rules for handling heavy cravings safely:</strong></p>
+      <ol style="font-size:13px; color:var(--t2); padding-left:20px;">
+        <li>Never eat them on an empty stomach.</li>
+        <li>Take an ACV shot (1 tbsp in 200ml water) 15 minutes prior.</li>
+        <li>Eat 2 boiled eggs or a handful of ndengu <strong>first</strong> – this acts as a protein shield, trapping incoming wheat sugars.</li>
+        <li>Wake up at 7:00 AM the next morning and execute 10 heavy squats with the 15kg dumbbells (or 20 bodyweight squats) – this flushes stored glycogen out of muscle cells, mitigating fat storage.</li>
+      </ol>
+      <p style="margin-top:8px; font-size:12px; color:var(--t3)">⚠️ Only for once‑every‑two‑weeks occasions. Not a daily rule.</p>
+    </div>
+    <div class="sec-label">Standard Environment Mode Strategies</div>
+    <div class="card card-amb"><p>Strategies for communal food settings where you cannot control what is served.</p></div>
+    <div class="sec-label">11:00 — Tea + mandazi brunch</div>
+    <div class="card"><h3>Strategy</h3><ul><li>Push to as late as possible — 11:30 or noon is better</li><li>Mandazi: maximum 1. Eat slowly, water between bites</li><li>Bring peanuts or a boiled egg — eat before the mandazi</li><li>Black tea over milky sweet tea at this point</li></ul></div>
+    <div class="sec-label">Lunch — rice/ugali/chapati + stew</div>
+    <div class="card"><h3>Order of eating</h3><ul><li>Step 1: Eat all vegetables and protein on your plate first</li><li>Step 2: Eat half the starch — then pause 5 minutes</li><li>Step 3: If still hungry, continue. If not, stop.</li><li>Ugali &gt; rice &gt; chapati for GI impact</li><li>Beans/ndengu/githeri stew is better than meat stew for insulin</li></ul></div>
+    <div class="card card-grn"><h3>What to bring from home</h3><ul><li>Peanuts in a small bag — eat before any communal starch meal</li><li>Hard‑boiled eggs — eat before rice or ugali</li><li>ACV in a small bottle — take before lunch</li><li>Chia seeds — add to any drink</li></ul></div>
+  </div>
+
+  <!-- ADD MEAL (unchanged) -->
+  <div class="tab-body" id="ml-add" style="display:none">
+    <h2>Add a meal</h2>
+    <div style="display:flex;flex-direction:column;gap:10px">
+      <div><label style="font-size:11px;color:var(--t3);display:block;margin-bottom:4px">Meal name</label><input type="text" id="add-meal-name" placeholder="e.g. My bean stew"></div>
+      <div><label style="font-size:11px;color:var(--t3);display:block;margin-bottom:4px">Ingredients</label><textarea id="add-meal-ing" rows="3" placeholder="List ingredients..."></textarea></div>
+      <div><label style="font-size:11px;color:var(--t3);display:block;margin-bottom:4px">Method</label><textarea id="add-meal-method" rows="3" placeholder="How to prepare..."></textarea></div>
+      <div><label style="font-size:11px;color:var(--t3);display:block;margin-bottom:4px">Compliance rating</label><select id="add-meal-comp"><option value="ideal">Ideal — high protein, low GI</option><option value="ok">Moderate</option><option value="avoid">High insulin impact</option></select></div>
+      <button class="btn btn-p" onclick="addCustomMeal()">Save meal</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════ HERBS (unchanged) ══════════════════ -->
+<div class="scr" id="sc-herbs">
+  <div class="tb"><div class="tb-title">Herb stack</div></div>
+  <div class="tab-body" style="overflow-y:auto;flex:1;padding:16px 18px">
+    <h2>Your herb stack</h2>
+    <div class="card card-acc"><p>Cinnamon + ACV lower blood glucose mechanistically. Hibiscus reduces visceral fat. Ginger and cayenne increase thermogenesis. Ashwagandha lowers cortisol measurably in RCTs. You have most of what you need.</p></div>
+    <div class="sec-label">Morning brew</div>
+    <div class="herb-row"><div class="herb-name">Cinnamon</div><div class="herb-info">Lowers fasting blood sugar by mimicking insulin at the receptor. Most important herb. ½ tsp per cup. Non-negotiable.</div></div>
+    <div class="herb-row"><div class="herb-name">Hibiscus</div><div class="herb-info">Anthocyanins reduce visceral fat accumulation and lower blood pressure. Studies show measurable waist circumference reduction. Keep in every brew.</div></div>
+    <div class="herb-row"><div class="herb-name">Rosemary</div><div class="herb-info">Improves glucose metabolism, mild diuretic (reduces water retention).</div></div>
+    <div class="herb-row"><div class="herb-name">Ginger</div><div class="herb-info">Thermogenic, reduces appetite, anti-nausea during fasting. Add every morning.</div></div>
+    <div class="herb-row"><div class="herb-name">Turmeric</div><div class="herb-info">Curcumin reduces systemic inflammation driving insulin resistance. MUST be paired with black pepper — increases absorption 2000x.</div></div>
+    <div class="herb-row"><div class="herb-name">Black pepper</div><div class="herb-info">Activates curcumin in turmeric. Also mildly thermogenic. Never use turmeric without it.</div></div>
+    <div class="herb-row"><div class="herb-name">Cayenne</div><div class="herb-info">Capsaicin suppresses appetite and increases fat oxidation for 2–3 hours. Best fasted in the morning.</div></div>
+    <div class="sec-label">Evening brew</div>
+    <div class="herb-row"><div class="herb-name">Ashwagandha</div><div class="herb-info">Proven cortisol reduction in multiple RCTs. High cortisol is a primary driver of belly fat. Take at night — wasted in the morning. ½ tsp in brew or as capsule.</div></div>
+    <div class="herb-row"><div class="herb-name">Chamomile</div><div class="herb-info">Improves sleep quality and lowers post-meal blood sugar. Better sleep = lower ghrelin = easier fasting next morning. Make it strong.</div></div>
+    <div class="sec-label">Add to food (off heat)</div>
+    <div class="herb-row"><div class="herb-name">Moringa</div><div class="herb-info">Complete protein, high iron and B vitamins. Always add after cooking — heat destroys nutrients. ½ tsp daily minimum.</div></div>
+    <div class="herb-row"><div class="herb-name">Baobab</div><div class="herb-info">Very high fibre and vitamin C. Feeds gut bacteria that regulate fat metabolism. Slightly sour, pleasant. Add to uji or stir into water.</div></div>
+    <div class="herb-row"><div class="herb-name">Paprika</div><div class="herb-info">Mild capsaicin, antioxidants. Use generously in stews — makes food satisfying without extra calories.</div></div>
+    <div class="sec-label">Use as gel / drink</div>
+    <div class="herb-row"><div class="herb-name">Chia seeds</div><div class="herb-info">Soak 1 tsp in water 10 min — forms a gel that slows glucose absorption. Add to uji or drink before a meal. Suppresses appetite for hours.</div></div>
+    <div class="sec-label">Use carefully</div>
+    <div class="herb-row"><div class="herb-name">Activated charcoal</div><div class="herb-info">NOT daily. Absorbs nutrients and medications. Use only after a genuine binge — ½ tsp in water, then stop.</div></div>
+    <div class="herb-row"><div class="herb-name">Sodium bicarb</div><div class="herb-info">½ tsp in water for acid relief only. Do not take before eating.</div></div>
+    <div class="sec-label">Brew protocols</div>
+    <div class="card card-grn" style="margin-top:0"><h4>Morning brew</h4><p>Cinnamon + hibiscus + rosemary + ginger + turmeric + black pepper + cayenne. Add lemon. No milk. No sugar. Boil in batch, store in flask.</p></div>
+    <div class="card"><h4>Evening brew</h4><p>Cinnamon + hibiscus + ashwagandha + chamomile. Can add rosemary. Drink 1 hour before sleep.</p></div>
+    <div class="card card-acc"><h4>ACV — buy this first</h4><p>1 tbsp apple cider vinegar in 200ml water, 15 min before first meal. Ksh 200–300. Your most cost-effective supplement.</p></div>
+    <div style="height:20px"></div>
+  </div>
+</div>
+
+<!-- ══════════════════ EXERCISE (unchanged, referenced) ══════════════════ -->
+<div class="scr" id="sc-exercise">
+  <div class="tb"><div class="tb-title">Exercise</div></div>
+  <div class="tab-row">
+    <button class="tab on" onclick="etab(this,'ex-plan')">Plan</button>
+    <button class="tab" onclick="etab(this,'ex-log')">Log</button>
+    <button class="tab" onclick="etab(this,'ex-env')">No equipment</button>
+  </div>
+  <div class="tab-body" id="ex-plan">
+    <h2>Exercise plan</h2>
+    <div class="card card-acc"><h4>The principle</h4><p>Lean + muscular, not just thin. Every kg of muscle built raises your resting metabolism permanently. Skipping = cardio. Dumbbells = where body recomposition happens.</p></div>
+    <div class="card card-grn"><h4>Equipment</h4><div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:6px"><span class="badge b-grn">Skipping rope</span><span class="badge b-grn">Ab roller</span><span class="badge b-grn">30kg dumbbells</span><span class="badge b-grn">Chest expander</span><span class="badge b-grn">Light bands</span></div></div>
+    <div class="card card-grn"><h4>Low-mood rule</h4><p>Do 5 minutes. Not 30. Get dressed, pick up the rope, do 5 minutes. Almost every time you will continue. And on the rare day you do not: 5 minutes keeps the habit alive.</p></div>
+    <div class="card card-blu"><h4>Muscle diagram — highlighted muscles are targeted today</h4><p style="font-size:11px;color:var(--t3)">Expand any workout day below to see its muscle diagram and watch demo videos.</p></div>
+    <div id="ex-plan-list"></div>
+  </div>
+  <div class="tab-body" id="ex-log" style="display:none">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px"><h2 style="margin:0">Exercise log</h2><button class="btn btn-sm btn-p" onclick="openModal('exlog',null)">+ Log</button></div>
+    <div id="ex-log-list"><div class="empty">No workouts logged yet.</div></div>
+  </div>
+  <div class="tab-body" id="ex-env" style="display:none">
+    <h2>No equipment</h2>
+    <div class="card card-amb"><h4>NEAT advantage</h4><p>Non-Exercise Activity Thermogenesis — calories burned from daily movement — can match a gym session. Maximise what you are already doing.</p></div>
+    <div class="card"><h3>Maximise daily movement</h3><ul><li>Take the longest walking route whenever possible</li><li>Stairs over any lift, always</li><li>Stand rather than sit when you can choose</li><li>A 10-minute walk immediately after eating lowers blood sugar by up to 30%</li><li>Carry things rather than asking for help</li></ul></div>
+    <div class="card card-grn"><h3>Micro-exercise anywhere</h3><ul><li>3 sets of 15 squats before dressing in the morning</li><li>20 push-ups before bed</li><li>Wall sit 3×30s while waiting for anything</li><li>Calf raises while standing in queues</li></ul></div>
+    <div class="card"><h3>Bodyweight only — full session</h3><p>Push-ups, squats, lunges, glute bridges, mountain climbers, plank. 3 rounds of each for 10–15 reps. 20 minutes total. No equipment. No space beyond a mat.</p></div>
+  </div>
+</div>
+
+<!-- ══════════════════ JOURNAL (unchanged) ══════════════════ -->
+<div class="scr" id="sc-journal">
+  <div class="tb"><div class="tb-title">Journal</div></div>
+  <div class="tab-row"><button class="tab on" onclick="jtab(this,'jn-write')">Write</button><button class="tab" onclick="jtab(this,'jn-entries')">Entries</button><button class="tab" onclick="jtab(this,'jn-quotes')">Quotes</button></div>
+  <div class="tab-body" id="jn-write"><h2>Today's journal</h2><div style="display:flex;gap:8px;margin-bottom:12px;align-items:center;flex-wrap:wrap"><button class="mic-btn" id="mic-btn" onclick="toggleDictation()"><svg viewBox="0 0 24 24"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg>Dictate</button><span id="mic-status" style="font-size:11px;color:var(--t3);font-family:var(--mono)"></span></div><div style="display:flex;flex-direction:column;gap:10px"><div><label style="font-size:11px;color:var(--t3);display:block;margin-bottom:4px">How do you feel today?</label><textarea id="j-feel" rows="2" placeholder="Energy, mood, stress level..."></textarea></div><div><label style="font-size:11px;color:var(--t3);display:block;margin-bottom:4px">What did you eat? Any effects?</label><textarea id="j-food" rows="3" placeholder="Foods, bloating, energy after meals, cravings..."></textarea></div><div><label style="font-size:11px;color:var(--t3);display:block;margin-bottom:4px">Fast / protocol today</label><textarea id="j-fast" rows="2" placeholder="Hours fasted, how hunger felt, any breaks..."></textarea></div><div><label style="font-size:11px;color:var(--t3);display:block;margin-bottom:4px">Mind + productivity</label><textarea id="j-mind" rows="2" placeholder="Applications, tasks completed, wins..."></textarea></div><div><label style="font-size:11px;color:var(--t3);display:block;margin-bottom:4px">One thing I'll carry forward</label><textarea id="j-carry" rows="2" placeholder="One learning or intention for tomorrow..."></textarea></div></div><div style="display:flex;gap:8px;margin-top:12px"><button class="btn btn-p" style="flex:1" onclick="saveJournal()">Save entry</button><button class="tts-btn" id="tts-read-btn" onclick="readJournal()"><svg viewBox="0 0 24 24"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/></svg>Read aloud</button></div></div>
+  <div class="tab-body" id="jn-entries" style="display:none"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px"><h2 style="margin:0">Past entries</h2></div><div id="journal-list"><div class="empty">No entries yet. Start writing.</div></div></div>
+  <div class="tab-body" id="jn-quotes" style="display:none"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px"><h2 style="margin:0">Quote library</h2><button class="btn btn-sm btn-p" onclick="openModal('addquote',null)">+ Add</button></div><div id="quotes-list"></div></div>
+</div>
+
+<!-- ══════════════════ PROGRESS (unchanged) ══════════════════ -->
+<div class="scr" id="sc-progress">
+  <div class="tb"><div class="tb-title">Progress</div></div>
+  <div class="tab-row"><button class="tab on" onclick="pgtab(this,'pg-overview')">Overview</button><button class="tab" onclick="pgtab(this,'pg-weight')">Weight</button><button class="tab" onclick="pgtab(this,'pg-history')">Meal history</button></div>
+  <div class="tab-body" id="pg-overview"><h2>Progress overview</h2><div class="card"><h4>Compliance — last 14 days</h4><p style="font-size:11px;color:var(--t3);margin-bottom:8px">Based on meals you ticked and their compliance rating.</p><div id="compliance-chart"></div></div><div class="card"><h4>Weight trend</h4><div id="weight-chart"></div></div><div class="card"><h4>7-day streak</h4><div class="streak-row" id="streak-row-2" style="padding:10px 0 0"></div></div></div>
+  <div class="tab-body" id="pg-weight" style="display:none"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px"><h2 style="margin:0">Weight log</h2><button class="btn btn-sm btn-p" onclick="openModal('weight',null)">+ Log</button></div><div class="card card-grn" style="margin-bottom:10px;padding:10px 14px"><p style="font-size:12px;margin:0">No scale? Use a tailor's tape. Log waist in cm instead of or alongside weight. Waist reduction is the most meaningful metric for metabolic health. Weigh once per week — Sunday morning, same conditions, before eating.</p></div><div id="weight-summary" style="display:none;margin-bottom:10px;padding:12px 14px;background:var(--s1);border:.5px solid var(--b1);border-radius:var(--rl)"></div><div id="weight-log-list"><div class="empty">No weight logged yet.</div></div></div>
+  <div class="tab-body" id="pg-history" style="display:none"><h2>Meal history</h2><div id="eaten-history-list"><div class="empty">No meal history yet. Tick meals in Today's plan to build your history.</div></div></div>
+</div>
+
+<!-- ══════════════════ SETTINGS (updated default times) ══════════════════ -->
+<div class="scr" id="sc-settings">
+  <div class="tb"><div class="tb-title">Settings</div></div>
+  <div style="flex:1;overflow-y:auto;padding:16px 18px">
+    <div class="sec-label">Profile</div>
+    <div class="card"><div style="display:flex;flex-direction:column;gap:10px"><div><label style="font-size:11px;color:var(--t3);display:block;margin-bottom:4px">Name</label><input type="text" id="s-name" placeholder="Your name"></div><div style="display:grid;grid-template-columns:1fr 1fr;gap:10px"><div><label style="font-size:11px;color:var(--t3);display:block;margin-bottom:4px">Current weight (kg)</label><input type="number" id="s-weight" placeholder="65" id="s-weight"></div><div><label style="font-size:11px;color:var(--t3);display:block;margin-bottom:4px">Target weight (kg)</label><input type="number" id="s-target" placeholder="50"></div></div><div><label style="font-size:11px;color:var(--t3);display:block;margin-bottom:4px">Cycle day (1–28, optional)</label><input type="number" id="s-cycle" placeholder="e.g. 5" min="1" max="28"></div></div></div>
+    <div class="sec-label">Eating window</div>
+    <div class="card"><div style="display:grid;grid-template-columns:1fr 1fr;gap:10px"><div><label style="font-size:11px;color:var(--t3);display:block;margin-bottom:4px">Opens</label><input type="time" id="s-open" value="14:00"></div><div><label style="font-size:11px;color:var(--t3);display:block;margin-bottom:4px">Closes</label><input type="time" id="s-close" value="18:00"></div></div><div style="margin-top:10px"><label style="font-size:11px;color:var(--t3);display:block;margin-bottom:4px">Protocol</label><select id="s-proto"><option value="20:4">20:4</option><option value="18:6">18:6</option><option value="OMAD">OMAD</option><option value="Custom">Custom</option></select></div></div>
+    <div class="sec-label">Environment mode</div>
+    <div class="card"><div style="display:flex;justify-content:space-between;align-items:center"><div><div style="font-size:13px">Environment mode</div><div style="font-size:11px;color:var(--t3);margin-top:2px">Adapt for communal food settings</div></div><label class="toggle"><input type="checkbox" id="s-env"><span class="tslider"></span></label></div></div>
+    <div class="sec-label">Notifications</div>
+    <div class="card"><div style="display:flex;justify-content:space-between;align-items:center;padding:6px 0;border-bottom:.5px solid var(--b1)"><div style="font-size:13px">Window opening reminder</div><label class="toggle"><input type="checkbox" id="s-rem-open" checked><span class="tslider"></span></label></div><div style="display:flex;justify-content:space-between;align-items:center;padding:6px 0;border-bottom:.5px solid var(--b1)"><div style="font-size:13px">Window closing reminder</div><label class="toggle"><input type="checkbox" id="s-rem-close" checked><span class="tslider"></span></label></div><div style="display:flex;justify-content:space-between;align-items:center;padding:6px 0"><div style="font-size:13px">Fast start log reminder</div><label class="toggle"><input type="checkbox" id="s-rem-fast" checked><span class="tslider"></span></label></div></div>
+    <button class="btn btn-p" style="width:100%;margin:8px 0" onclick="saveSettings()">Save settings</button><div id="save-ok" style="text-align:center;font-size:12px;color:var(--grn);display:none;margin-bottom:10px">Saved.</div>
+    <div class="sec-label">Data</div>
+    <div style="display:flex;flex-direction:column;gap:8px"><button class="btn" onclick="exportData()">Export all data (JSON backup)</button><div><input type="file" id="import-file" accept=".json" style="display:none" onchange="importData(this)"><button class="btn" onclick="document.getElementById('import-file').click()">Import from backup</button></div><button class="btn" onclick="exportICS()">Export to Google Calendar (.ics)</button><button class="btn btn-r" onclick="clearAllData()">Clear all data</button></div>
+    <div class="card" style="margin-top:16px"><h4>Deploy to Vercel (free hosting)</h4><p>1. Push this folder to a GitHub repo<br>2. Connect repo to Vercel — vercel.com<br>3. Deploy. Your URL is live in 2 minutes.<br>4. Add Supabase for cross-device sync — see SUPABASE_URL in js/app.js</p></div>
+    <div style="text-align:center;margin-top:16px;padding-bottom:20px"><div style="font-family:var(--serif);font-style:italic;font-size:13px;color:var(--t3)">Fast Mind · open, offline-first</div></div>
+  </div>
+</div>
+
+<!-- BOTTOM NAV (unchanged) -->
+<div id="bnav">
+  <button class="nv on" onclick="goTo('home')"><svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>Home</button>
+  <button class="nv" onclick="goTo('proto')"><svg viewBox="0 0 24 24"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>Protocol</button>
+  <button class="nv" onclick="goTo('meals')"><svg viewBox="0 0 24 24"><path d="M18 8h1a4 4 0 0 1 0 8h-1"/><path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"/><line x1="6" y1="1" x2="6" y2="4"/><line x1="10" y1="1" x2="10" y2="4"/><line x1="14" y1="1" x2="14" y2="4"/></svg>Meals</button>
+  <button class="nv" onclick="goTo('herbs')"><svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>Herbs</button>
+  <button class="nv" onclick="goTo('exercise')"><svg viewBox="0 0 24 24"><path d="M18 3a3 3 0 0 0-3 3l-7 3a3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3l7 3a3 3 0 0 0 3 3 3 3 0 0 0 3-3 3 3 0 0 0-3-3l-7-3a3 3 0 0 0-3-3 3 3 0 0 0 3-3z"/></svg>Exercise</button>
+  <button class="nv" onclick="goTo('journal')"><svg viewBox="0 0 24 24"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>Journal</button>
+  <button class="nv" onclick="goTo('progress')"><svg viewBox="0 0 24 24"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>Progress</button>
+  <button class="nv" onclick="goTo('settings')"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06-.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>Settings</button>
+</div>
+
+<!-- MODAL -->
+<div class="overlay" id="modal-overlay">
+  <div class="modal" id="modal-box">
+    <button class="modal-close" onclick="closeModal()">×</button>
+    <div class="modal-title" id="modal-title">Log</div>
+    <div id="modal-body"></div>
+  </div>
+</div>
+
+<script src="js/app.js"></script>
+<script src="js/fasting.js"></script>
+<script src="js/meals.js"></script>
+<script src="js/exercise.js"></script>
+<script src="js/journal.js"></script>
+<script src="js/progress.js"></script>
+<script>
+loadData();
+allQuotes = [...QUOTES, ...(APP.customQuotes||[])];
+renderAll();
+renderWeeks();
+renderQuotes();
+renderFastLog();
+renderFastRecords();
+renderExPlan();
+updateClock(); setInterval(updateClock, 1000);
+setInterval(() => { qIdx = (qIdx+1) % allQuotes.length; showQ(); }, 300000);
+setInterval(updateSlotStatus, 60000);
+(function mirrorStreak(){
+  const r2 = document.getElementById('streak-row-2');
+  if(!r2) return;
+  const s = document.getElementById('streak-row');
+  if(s) r2.innerHTML = s.innerHTML;
+})();
+if('Notification' in window && Notification.permission === 'default') Notification.requestPermission();
+initSupabase();
+if('serviceWorker' in navigator){
+  navigator.serviceWorker.register('/sw.js')
+    .then(() => console.info('SW registered'))
+    .catch(e => console.warn('SW failed:', e));
+}
+</script>
+</body>
+</html>
